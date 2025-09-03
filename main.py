@@ -26,7 +26,7 @@ async def health():
     return {"Ok"}
 
 
-@app.post("/phone")
+@app.post("/phones")
 async def post_phone(new_phones: List[Phone]):
     list_phone.extend(new_phones)
     serialized_post = serialize_posts()

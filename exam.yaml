@@ -1,0 +1,114 @@
+
+openapi: 3.0.3
+info:
+  title: TD OpenAPI Specification
+  description: TD OpenAPI Specification - Exercise 3
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /health:
+    get:
+      responses:
+        200:
+          description: teste pour voir si l'API marche normalement
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Ok
+
+  /phones:
+    get:
+      responses:
+        200:
+          description: liste des téléphones en
+
+
+
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Task'
+      responses:
+        201:
+          description: List of tasks created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    delete:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  taskIdentifier:
+                    type: integer
+      responses:
+        200:
+          description: List of deleted tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+  /tasks/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Task found by identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        404:
+          description: Task not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Task not found
+    delete:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Deleted task provided by identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Faire les courses
+        completed:
+          type: boolean
