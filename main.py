@@ -1,13 +1,39 @@
+import numbers
+from http.client import responses
+
 from fastapi import FastAPI
+import base64
+from typing import List
+from pydantic import BaseModel
+from starlette.requests import Request
+from starlette.responses import Response, JSONResponse
 
 app = FastAPI()
 
+class Phone(BaseModel):
+    identifier: str
+    brand: str
+    model: str
+    characteristic:{
+        "ram_memory": int,
+        "rom_memory": numbers
+    }
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+list_phone: List[Phone]=[]
+
+@app.get("/health", status_code=200)
+async def health():
+    return {"Ok"}
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@app.post("/phone")
+async def post_phone(new_phones: List[Phone]):
+    list_phone.extend(new_phones)
+    serialized_post = serialize_posts()
+    return JSONResponse(content=serialized_post, status_code=201,media_type="application/json")
+
+def serialize_posts():
+    post_serialized = []
+    for p in list_phone:
+        post_serialized.append(p.model_dump())
+    return post_serialized
